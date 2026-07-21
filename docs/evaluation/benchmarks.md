@@ -13,6 +13,7 @@ TorchUMM supports 10+ benchmarks spanning image generation, visual understanding
 | [WISE](https://github.com/PKU-YuanGroup/WISE) | World knowledge in image generation | Generation | Included in repo | [Details](../data-preparation.md) |
 | [UEval](https://github.com/mdl-ueval/UEval) | Unified understanding + generation | Understanding + Generation | [HuggingFace](https://huggingface.co/datasets/primerL/UEval-all) | [Details](../data-preparation.md) |
 | [Uni-MMMU](https://github.com/AI-in-Edtech/Uni-MMMU) | Multimodal understanding, generation, and editing | Understand + Generate + Edit | [HuggingFace](https://huggingface.co/datasets) | [Details](../data-preparation.md) |
+| [Unison](https://github.com/FudanCVL/Unison) | Synergy between understanding and generation (IC / UGG / GGU / ME) | Understand + Generate + Edit | [GitHub](https://github.com/FudanCVL/Unison) | [Details](../data-preparation.md) |
 | [MME](https://github.com/BradyFU/Awesome-Multimodal-Large-Language-Models) | Multimodal perception and cognition | Understanding | [HuggingFace](https://huggingface.co/OpenGVLab/InternVL) | [Details](../data-preparation.md) |
 | [MMMU](https://mmmu-benchmark.github.io/) | Massive multimodal understanding | Understanding | HuggingFace (auto) | [Details](../data-preparation.md) |
 | [MMBench](https://opencompass.org.cn/leaderboard-multimodal) | VLM systematic evaluation | Understanding | [OpenMMLab](https://download.openmmlab.com/mmclassification/datasets/mmbench/) | [Details](../data-preparation.md) |
@@ -50,6 +51,7 @@ These benchmarks separate generation from scoring, which allows using different 
 - **WISE** --- generate images, then score with Qwen VL models
 - **UEval** --- generate text + image answers, then score with Qwen models
 - **Uni-MMMU** --- generate outputs, then score
+- **Unison** --- generate outputs for four tasks (IC / UGG / GGU / ME), then score with Unison-Judge (local Qwen3-VL-8B-Instruct checkpoint or an OpenAI-compatible API)
 - **GEdit-Bench** --- edit images, then score with VIEScore (Qwen VL)
 
 ```bash

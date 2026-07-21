@@ -22,6 +22,7 @@
 
 ## News
 
+- **Jul 2026**: Added [Unison](https://github.com/FudanCVL/Unison) evaluation benchmark support.
 - **Jul 2026**: Added MMStar evaluation benchmark support.
 
 ---
@@ -49,6 +50,7 @@
     - [GEdit-Bench](#gedit-bench)
     - [ImgEdit-Bench](#imgedit-bench)
   - [Uni-MMMU Benchmark](#uni-mmmu-benchmark)
+  - [Unison Benchmark](#unison-benchmark)
   - [Post-Training Models](#post-training-models)
   - [Detailed Sub-scores](#detailed-sub-scores)
   - [Reproducing Results](#reproducing-results)
@@ -232,6 +234,7 @@ These benchmarks include their data in the repository:
 
 - **UEval**: Auto-downloaded from HuggingFace (`primerL/UEval-all`) at evaluation time. For Modal, run `modal run modal/download.py --dataset ueval`.
 - **Uni-MMMU**: Requires dataset, scoring models (Qwen2.5-VL-72B-Instruct + Qwen3-32B), and DreamSim (auto-downloaded). For Modal: `modal run modal/download.py --dataset uni_mmmu` and `modal run modal/download.py --model evaluator`. See [eval/generation/uni_mmmu/README.md](eval/generation/uni_mmmu/README.md) for full setup.
+- **Unison**: Requires [Unison-Bench](https://huggingface.co/datasets/FudanCVL/Unison) (`huggingface-cli download FudanCVL/Unison --repo-type dataset --local-dir ${UMM_DATASETS}/unison/Unison-Bench/data`) and the [Unison-Judge](https://huggingface.co/FudanCVL/Unison-Judge) scoring model (`huggingface-cli download FudanCVL/Unison-Judge --local-dir ${UMM_MODEL_CACHE}/evaluator/Unison-Judge`), or an OpenAI-compatible API judge. See [eval/generation/unison/README.md](eval/generation/unison/README.md) for full setup.
 - **GEdit-Bench**: Auto-downloaded from HuggingFace (`stepfun-ai/GEdit-Bench`) at evaluation time. For Modal, run `modal run modal/download.py --dataset gedit`. Scoring uses Qwen2.5-VL-72B-Instruct (same as WISE).
 
 ---
@@ -263,6 +266,10 @@ PYTHONPATH=src python -m umm.cli.main eval --config configs/eval/mme/mme_bagel.y
 
 # MMStar on Bagel
 PYTHONPATH=src python -m umm.cli.main eval --config configs/eval/mmstar/mmstar_bagel.yaml
+
+# Unison on Bagel (generation, then scoring)
+PYTHONPATH=src python -m umm.cli.main eval --config configs/eval/unison/unison_bagel_generate.yaml
+PYTHONPATH=src python -m umm.cli.main eval --config configs/eval/unison/unison_bagel_score.yaml
 ```
 
 **Post-Training**
@@ -464,6 +471,20 @@ The `InferenceRequest` dataclass accepts:
 
 > **Note:** DeepGen, BLIP3-o, and TokenFlow are excluded from Uni-MMMU as they do not support image understanding. Janus-Pro cannot perform editing tasks.
 
+### Unison Benchmark
+
+[Unison](https://github.com/FudanCVL/Unison) evaluates the synergy between understanding and generation across four dimensions: Internal Consistency (IC), Understanding-Guided Generation (UGG), Generation-Guided Understanding (GGU), and Mutual Enhancement (ME). Each dimension is scored on Understanding / Generation / Unified sub-metrics by **Unison-Judge**.
+
+Officially reported scores from the [Unison paper](https://arxiv.org/abs/2606.26984) (not yet reproduced through TorchUMM's pipeline):
+
+| Model | IC (Uni.) | UGG (Uni.) | GGU (Uni.) | ME (Uni.) | Overall |
+| :---- | :-------: | :--------: | :--------: | :-------: | :-----: |
+| OmniGen2 | 74.5 | 52.0 | 30.9 | 47.7 | 51.3 |
+| BAGEL | **80.3** | **67.9** | **32.0** | 32.5 | **53.2** |
+| UniWorld-V1 | 65.1 | 44.9 | 26.9 | 31.3 | 42.1 |
+
+> See [eval/generation/unison/README.md](eval/generation/unison/README.md) for the full benchmark description, config reference, and instructions to reproduce these scores with TorchUMM's own generation backbones and the local/API Unison-Judge.
+
 ### Post-Training Benchmarks
 
 #### Generation
@@ -512,7 +533,7 @@ The `InferenceRequest` dataclass accepts:
 
 ### Reproducing Results
 
-Benchmarks with two-stage evaluation (GenEval, WISE, UEval, Uni-MMMU) provide separate `_generate` and `_score` configs. You can also use the base config (mode: `full`) to run both stages in one command.
+Benchmarks with two-stage evaluation (GenEval, WISE, UEval, Uni-MMMU, Unison) provide separate `_generate` and `_score` configs. You can also use the base config (mode: `full`) to run both stages in one command.
 
 **GenEval on Bagel**
 

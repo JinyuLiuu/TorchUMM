@@ -102,6 +102,24 @@ Each benchmark requires specific data. Generation benchmarks (DPG Bench, GenEval
 
     See [eval/generation/uni_mmmu/README.md](../eval/generation/uni_mmmu/README.md) for details.
 
+    ### Unison
+
+    Unison-Bench is hosted on HuggingFace ([FudanCVL/Unison](https://huggingface.co/datasets/FudanCVL/Unison)). Reference: [FudanCVL/Unison](https://github.com/FudanCVL/Unison).
+
+    ```bash
+    huggingface-cli download FudanCVL/Unison \
+        --repo-type dataset --local-dir ${UMM_DATASETS}/unison/Unison-Bench/data
+    ```
+
+    Scoring uses **Unison-Judge** ([FudanCVL/Unison-Judge](https://huggingface.co/FudanCVL/Unison-Judge)), a dedicated Qwen3-VL-8B-Instruct-based evaluator (not shared with other benchmarks):
+
+    ```bash
+    huggingface-cli download FudanCVL/Unison-Judge \
+        --local-dir ${UMM_MODEL_CACHE}/evaluator/Unison-Judge
+    ```
+
+    See [eval/generation/unison/README.md](../eval/generation/unison/README.md) for details.
+
     ### GEdit-Bench
 
     GEdit-Bench data is hosted on HuggingFace ([stepfun-ai/GEdit-Bench](https://huggingface.co/datasets/stepfun-ai/GEdit-Bench)). It is auto-downloaded at evaluation time if not pre-downloaded.
