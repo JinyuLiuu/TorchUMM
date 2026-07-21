@@ -42,6 +42,9 @@ def run_eval_command(args: Any) -> int:
     if benchmark == "uni_mmmu" or "uni_mmmu" in raw_cfg:
         from umm.cli.uni_mmmu import run_eval_command as _fn
         return _fn(args)
+    if benchmark == "unison" or "unison" in raw_cfg:
+        from umm.cli.unison import run_eval_command as _fn
+        return _fn(args)
     if benchmark == "wise" or "wise" in raw_cfg:
         from umm.cli.wise import run_wise_eval_command as _fn
         return _fn(args)

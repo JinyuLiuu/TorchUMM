@@ -3,7 +3,7 @@
 This page provides the exact commands needed to reproduce the evaluation results reported in TorchUMM.
 
 !!! tip "Two-stage vs. single-stage"
-    Benchmarks with two-stage evaluation (GenEval, WISE, UEval, Uni-MMMU, GEdit-Bench) provide separate `_generate` and `_score` configs. You can also use the base config (mode: `full`) to run both stages in one command. Single-stage benchmarks (DPG Bench, MME, MMMU, MMBench, MM-Vet, MathVista) run generation and scoring together.
+    Benchmarks with two-stage evaluation (GenEval, WISE, UEval, Uni-MMMU, Unison, GEdit-Bench) provide separate `_generate` and `_score` configs. You can also use the base config (mode: `full`) to run both stages in one command. Single-stage benchmarks (DPG Bench, MME, MMMU, MMBench, MM-Vet, MathVista) run generation and scoring together.
 
 ---
 
@@ -68,6 +68,29 @@ Config files:
 - `configs/eval/ueval/ueval_bagel_generate.yaml` --- generation stage
 - `configs/eval/ueval/ueval_bagel_score.yaml` --- scoring stage
 - `configs/eval/ueval/ueval_bagel.yaml` --- full pipeline
+
+### Unison on Bagel
+
+Unison evaluates the synergy between understanding and generation across four tasks --- Internal Consistency (IC), Understanding-Guided Generation (UGG), Generation-Guided Understanding (GGU), and Mutual Enhancement (ME). Scoring is performed by Unison-Judge, a Qwen3-VL-8B-Instruct-based evaluator that can run locally on GPUs or via an OpenAI-compatible API.
+
+```bash
+# Step 1: Generate outputs for all four tasks
+PYTHONPATH=src python -m umm.cli.main eval \
+    --config configs/eval/unison/unison_bagel_generate.yaml
+
+# Step 2: Score with Unison-Judge
+PYTHONPATH=src python -m umm.cli.main eval \
+    --config configs/eval/unison/unison_bagel_score.yaml
+```
+
+To run a subset of tasks, set `unison.tasks` in the config (e.g. `[IC, UGG]`) instead of `all`. Scoring can be run in a separate Python environment via `unison.scoring.python_executable` if the judge dependencies differ from the generation backbone's environment.
+
+Config files:
+
+- `configs/eval/unison/unison_bagel_generate.yaml` --- generation stage
+- `configs/eval/unison/unison_bagel_score.yaml` --- scoring stage
+
+See `eval/generation/unison/README.md` for details on the four tasks and the CSV schema shared between the generation and scoring scripts.
 
 ---
 

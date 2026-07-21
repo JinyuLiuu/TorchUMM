@@ -1,0 +1,43 @@
+eval:
+  benchmark: unison
+
+inference:
+  backbone: bagel
+  backbone_cfg:
+    model_path: ${UMM_MODEL_CACHE}/bagel/BAGEL-7B-MoT
+    bagel_root: ${UMM_CODEBASE}/model/Bagel
+    offload_folder: ./tmp/offload_bagel0
+    max_mem_per_gpu: "80GiB"
+    seed: 42
+    generation_cfg:
+      cfg_text_scale: 4.0
+      cfg_img_scale: 1.0
+      num_timesteps: 50
+    editing_cfg:
+      cfg_text_scale: 4.0
+      cfg_img_scale: 2.0
+      num_timesteps: 50
+    understanding_cfg:
+      max_think_token_n: 1000
+      do_sample: false
+  request:
+    params: {}
+
+unison:
+  data_root: ${UMM_DATASETS}/unison/Unison-Bench/data
+  tasks: all  # all | IC,UGG,GGU,ME (comma separated) | [IC, UGG, GGU, ME]
+  out_dir: output/unison/bagel
+  max_samples: 0
+  resume: true
+  max_iterations: 5  # ME dialogue rounds cap
+  mode: generate  # generate | score | full
+  score_output_path: output/unison/eval/bagel.json
+  scoring:
+    judge_backend: local  # local | api
+    local_model_path: ${UMM_MODEL_CACHE}/evaluator/Unison-Judge
+    gpu_ids: "0-7"
+    judge_io_log: judge_io_local.csv
+    max_workers: 8
+    max_items_per_task: 0  # 0 = all
+    pixel_space_bbox: false
+    imgedit_bbox_mode: full  # full | noscope

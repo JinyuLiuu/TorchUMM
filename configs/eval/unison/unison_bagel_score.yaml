@@ -1,0 +1,29 @@
+eval:
+  benchmark: unison
+
+inference:
+  backbone: bagel
+  backbone_cfg: {}
+
+unison:
+  data_root: ${UMM_DATASETS}/unison/Unison-Bench/data
+  tasks: all  # all | IC,UGG,GGU,ME (comma separated) | [IC, UGG, GGU, ME]
+  out_dir: output/unison/bagel
+  max_samples: 0
+  resume: true
+  mode: score  # generate | score | full
+  score_output_path: output/unison/eval/bagel.json
+  scoring:
+    judge_backend: local  # local | api
+    local_model_path: ${UMM_MODEL_CACHE}/evaluator/Unison-Judge
+    gpu_ids: "0-7"
+    judge_io_log: judge_io_local.csv
+    max_workers: 8
+    max_items_per_task: 0  # 0 = all
+    pixel_space_bbox: false
+    imgedit_bbox_mode: full  # full | noscope
+    # Uncomment to use the API judge instead of the local Unison-Judge model:
+    # judge_backend: api
+    # api_key: ${OPENAI_API_KEY}
+    # api_model: gpt-4o
+    # thinking_tasks: UGG,ME
